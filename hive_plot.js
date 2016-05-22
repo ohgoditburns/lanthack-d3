@@ -1,8 +1,8 @@
 //hiveplot
 var width = 800,
-    height = 800,
+    height = 700,
     innerRadius = 20,
-    outerRadius = 400;
+    outerRadius = 350;
 
 var angle = d3.scale.ordinal().domain(d3.range(4)).rangePoints([0, 2 * Math.PI]),
     radius = d3.scale.linear().range([innerRadius, outerRadius]),
@@ -19,12 +19,13 @@ var color = d3.scale.category20();
 
 var force = d3.layout.force()
     .charge(-120)
+    .gravity(1)
     .linkDistance(30)
-    .size([600, 800]);
+    .size([600, 600]);
 
 var force_svg = d3.select("body").append("svg")
     .attr("width", 600)
-    .attr("height", 800);
+    .attr("height", 600);
 
 //tooltips
 var tip = d3.tip()
@@ -43,17 +44,13 @@ d3.json("docs.json", function(json) {
   var nodes = json.nodes;
   var links = [];
   var link_refs = json.links;
-  var force_nodes = nodes;
-  var force_links = link_refs;
-
+  
   json.links.forEach(function(d) {
     links.push({source: nodes[d.source], target: nodes[d.target]})
   })
 
-  force
-        .nodes(force_nodes)
-        .links(force_links)
-        .start();
+
+  
 
 
   hive = svg.selectAll(".axis")
@@ -84,6 +81,18 @@ d3.json("docs.json", function(json) {
       .on("mouseout", mouseouted)
       .on("click", mouseclicked);
 
+
+  
+
+});
+
+var force_nodes = [];
+var force_links = [];
+
+  force
+        .nodes(force_nodes)
+        .links(force_links)
+        .start();
   var force_link = force_svg.selectAll(".link")
       .data(force_links)
     .enter().append("line")
@@ -92,15 +101,7 @@ d3.json("docs.json", function(json) {
 
 
   var force_node = force_svg.selectAll(".node")
-      .data(force_nodes)
-    .enter().append("circle")
-      .attr("class", "node")
-      .attr("r", 5)
-      .style("fill", function(d) { return color(d.group); })
-      .on("mouseover", tip.show)
-      .on("mouseout", tip.hide)
-      .on("click", graphclick)
-      .call(force.drag);
+      .data(force_nodes);
 
   force.on("tick", function() {
     force_link.attr("x1", function(d) { return d.source.x; })
@@ -111,8 +112,7 @@ d3.json("docs.json", function(json) {
     force_node.attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; });
   });
-
-});
+/**/
 
 function degrees(radians) {
   return radians / Math.PI * 180 - 90;
@@ -142,16 +142,29 @@ function mouseouted(d) {
 
 
 function mouseclicked(d) {
-  force_nodes.length = 0;
-  force_links.length = 0;
-  force.selectAll("g")
-    .data(force.nodes())
+force_nodes.push(d);
+start();
 }
 
 function graphclick(d) {
   window.open(d.url); 
 }
 
+function start() {
+  force_link = force_link.data(force.links(), function(d) { return d.source.name + "-" + d.target.name; });
+  force_link.enter().insert("line", ".node").attr("class", "link");
+  force_link.exit().remove();
 
-/// FORCE GRAPH here
+  force_node = force_node.data(force.nodes(), function(d) { return d.name;});
+  force_node
+    .enter().append("circle")
+      .attr("class", "node")
+      .attr("r", 5)
+      .on("mouseover", tip.show)
+      .on("mouseout", tip.hide)
+      .on("click", graphclick)
+      .call(force.drag);
+  force_node.exit().remove();
 
+  force.start();
+}
