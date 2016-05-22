@@ -14,8 +14,6 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-//force graph 
-var color = d3.scale.category20();
 
 var force = d3.layout.force()
     .charge(-120)
@@ -73,7 +71,7 @@ d3.json("docs.json", function(json) {
   node = node
       .data(nodes)
     .enter().append("circle")
-      .attr("class", "node")
+      .attr("class", function(d) {return d.pub;})
       .attr("transform", function(d) { return "rotate(" + degrees(angle(d.x)) + ")"; })
       .attr("cx", function(d) { return radius(d.y); })
       .attr("r", 2)
@@ -144,9 +142,8 @@ function mouseouted(d) {
 function mouseclicked(d) {
 force_nodes.length = 0;
 force_nodes.push(d);
-link.each(function(l) {if(l.target == d) force_nodes.push(l.source ); });
-link.each(function(l) {if(l.source == d) force_nodes.push(l.target ); });
-console.log(force_nodes);
+link.each(function(l) {if(l.target == d) return force_nodes.push(l.source ); });
+link.each(function(l) {if(l.source == d) return force_nodes.push(l.target ); });
 start();
 }
 
@@ -162,9 +159,9 @@ function start() {
   force_node = force_node.data(force.nodes(), function(d) { return d.name;});
   force_node
     .enter().append("circle")
-      .attr("class", "node")
+      .attr("class", function(d) {return d.pub;})
       .attr("r", 5)
-      .style("fill", function(d) {color(d.x);})
+      .style("fill", function(d) {console.log(color(d.pub)); color(d.pub) ;})
       .on("mouseover", tip.show)
       .on("mouseout", tip.hide)
       .on("click", graphclick)
