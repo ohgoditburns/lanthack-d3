@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.link, .link--selected {
+  fill: none;
+  
+}
+
+.link {
+  stroke: black;
+  stroke-width: 0.1px;
+}
+
+
+.axis{
+  stroke-width: 0.5px;
+}
+
+.node {
+  stroke: darkblue;
+  fill: steelblue;
+  stroke-width: 0.5px;
+}
+
+.node--selected {
+  stroke: darkred;
+  fill: red;
+  opacity:1;
+  stroke-width: 2px;
+}
+.link--selected {
+  stroke: red;
+  stroke-width: 1px;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+  position:absolute;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+</style>
+<body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script src="d3.hive.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<script src="hive_plot.js"></script>
