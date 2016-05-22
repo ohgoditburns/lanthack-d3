@@ -142,7 +142,11 @@ function mouseouted(d) {
 
 
 function mouseclicked(d) {
+force_nodes.length = 0;
 force_nodes.push(d);
+link.each(function(l) {if(l.target == d) force_nodes.push(l.source ); });
+link.each(function(l) {if(l.source == d) force_nodes.push(l.target ); });
+console.log(force_nodes);
 start();
 }
 
@@ -160,6 +164,7 @@ function start() {
     .enter().append("circle")
       .attr("class", "node")
       .attr("r", 5)
+      .style("fill", function(d) {color(d.x);})
       .on("mouseover", tip.show)
       .on("mouseout", tip.hide)
       .on("click", graphclick)
