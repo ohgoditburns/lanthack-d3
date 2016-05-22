@@ -123,9 +123,6 @@ link
 // set node--selected for every node connected to a selected link
 node
       .classed("node--selected", function(n) { return n.active; });
-var test = link.filter(function(l){return l.source.active;})
-console.log(test);
-
 tip.show(d);
 
 }
