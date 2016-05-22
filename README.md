@@ -7,7 +7,7 @@ This d3 effort does a few things:
 3. Clicking on a node in the graph panel will open the article in a new page. Note that the Economist requires a subscription and will only let you see something like 10 articles a month.
 
 
-Uses sample code from Mike Bostock under GPL3 license. 
-Uses D3js which is under a BSD license. 
-Uses D3tip which is under an MIT license.
-This code is released under GPL3 license, enjoy!
+- Uses sample code from Mike Bostock under GPL3 license. 
+- Uses D3js which is under a BSD license. 
+- Uses D3tip which is under an MIT license.
+- This code is released under GPL3 license, enjoy!
