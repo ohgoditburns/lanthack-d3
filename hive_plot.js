@@ -123,6 +123,8 @@ link
 // set node--selected for every node connected to a selected link
 node
       .classed("node--selected", function(n) { return n.active; });
+var test = link.filter(function(l){return l.source.active;})
+console.log(test);
 
 tip.show(d);
 
@@ -132,7 +134,11 @@ function mouseouted(d) {
   node
       .classed("node--selected", false);
   link
-      .classed("link--selected", false);  
+      .classed("link--selected", false)
+      .each(function(l) {
+        l.target.active = false;
+        l.source.active = false;
+      });  
 
   tip.hide(d);    
 
@@ -141,9 +147,19 @@ function mouseouted(d) {
 
 function mouseclicked(d) {
 force_nodes.length = 0;
+force_links.length = 0;
 force_nodes.push(d);
-link.each(function(l) {if(l.target == d) return force_nodes.push(l.source ); });
-link.each(function(l) {if(l.source == d) return force_nodes.push(l.target ); });
+link.each(function(l) {
+  if(l.target == d) force_nodes.push(l.source);
+  if(l.source == d) force_nodes.push(l.target);
+});
+
+var links_to_draw =
+  link.filter(
+    function(l) {return  (force_nodes.indexOf(l.target) > -1) & (force_nodes.indexOf(l.source) > -1); }
+    );
+links_to_draw.each(function(l) {force_links.push(l)});
+
 start();
 }
 
@@ -153,7 +169,7 @@ function graphclick(d) {
 
 function start() {
   force_link = force_link.data(force.links(), function(d) { return d.source.name + "-" + d.target.name; });
-  force_link.enter().insert("line", ".node").attr("class", "link");
+  force_link.enter().insert("line", ".node").attr("class", "link").style("stroke-width", "1px");
   force_link.exit().remove();
 
   force_node = force_node.data(force.nodes(), function(d) { return d.name;});
@@ -161,7 +177,6 @@ function start() {
     .enter().append("circle")
       .attr("class", function(d) {return d.pub;})
       .attr("r", 5)
-      .style("fill", function(d) {console.log(color(d.pub)); color(d.pub) ;})
       .on("mouseover", tip.show)
       .on("mouseout", tip.hide)
       .on("click", graphclick)
