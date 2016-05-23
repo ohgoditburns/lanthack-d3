@@ -19,6 +19,7 @@ var force = d3.layout.force()
     .charge(-120)
     .gravity(1)
     .linkDistance(30)
+    .friction(0.3)
     .size([600, 600]);
 
 var force_svg = d3.select("body").append("svg")
@@ -166,7 +167,7 @@ function graphclick(d) {
 
 function start() {
   force_link = force_link.data(force.links(), function(d) { return d.source.name + "-" + d.target.name; });
-  force_link.enter().insert("line", ".node").attr("class", "link").style("stroke-width", "1px");
+  force_link.enter().insert("line", ".node").attr("class", "link").style("stroke-width", "0px");
   force_link.exit().remove();
 
   force_node = force_node.data(force.nodes(), function(d) { return d.name;});
