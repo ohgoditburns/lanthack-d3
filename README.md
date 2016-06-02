@@ -1,6 +1,5 @@
 # lanthack-d3
 
-###Introduction
 I've been working for a bit on topic models. In particular, I would like to find a political spectrum scoring for a piece of text. To that end, I scraped roughly 500 articles from a few politically polar publications, and ran a slightly modified latent Dirichlet allocation on them. (Modification means including some n-grams in the bag of words). I then constructed a graph using the correlation of topic assignments as edge weights. This graph is supplied to the d3 application here.
 
 This d3 effort does a few things:
